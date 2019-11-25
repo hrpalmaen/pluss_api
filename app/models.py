@@ -18,7 +18,6 @@ class Profile(models.Model):
     phone_number = models.CharField('Número telefónico', max_length=30)
     type_identification = models.CharField('Tipo de identificación', choices=TYPE_DOCUMENT, max_length=50)
     identification_number = models.CharField('Documento', max_length=20, unique=True)
-    group = models.ForeignKey(Group, verbose_name='Tipo de usuario', on_delete=models.CASCADE)
 
     date_created = models.DateTimeField('Fecha creación',auto_now_add=True)
     date_update = models.DateTimeField('Fecha última actualización',auto_now=True)
