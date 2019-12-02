@@ -54,13 +54,13 @@ class Product(models.Model):
     '''
     Modelo de productos
     '''
-    illustration = models.CharField('Imagen', max_length=500)
-    name = models.CharField('Nombre del producto', max_length=100)
-    detail = models.CharField('Descripción del producto', max_length=500)
-    measurements = models.CharField('Medidas', max_length=20)
-    color = models.CharField('colores disponibles', max_length=50)
-    mark_type = models.CharField('Tipo de marcación', max_length=50)
-    material = models.CharField('Material del producto', max_length=50)
+    illustration = models.CharField('Imagen', max_length=500, null=True)
+    name = models.CharField('Nombre del producto', max_length=100, null=True)
+    detail = models.CharField('Descripción del producto', max_length=500, null=True)
+    measurements = models.CharField('Medidas', max_length=20, null=True)
+    color = models.CharField('colores disponibles', max_length=50, null=True)
+    mark_type = models.CharField('Tipo de marcación', max_length=50, null=True)
+    material = models.CharField('Material del producto', max_length=50, null=True)
     
     def __str__(self):
         return f'{self.name}'
@@ -75,15 +75,15 @@ class Quotation(models.Model):
     '''
     client = models.ForeignKey(Client, verbose_name='cliente', on_delete=models.CASCADE)
     user = models.ForeignKey(User, verbose_name='Ejecutivo de ventas', on_delete=models.CASCADE)
-    delivery_time = models.CharField('Tiempo de entrega', max_length=5)
-    pay_format = models.CharField('Formato de pago', max_length=10)
+    delivery_time = models.CharField('Tiempo de entrega', max_length=5, null=True)
+    pay_format = models.CharField('Formato de pago', max_length=10, null=True)
     units = JSONField('Unidades a evaluar')
-    cost = models.CharField('Costo', max_length=20)
-    discount_rate = models.CharField('Porcentaje de descuento', max_length=5)
+    cost = models.CharField('Costo', max_length=20, null=True)
+    discount_rate = models.CharField('Porcentaje de descuento', max_length=5, null=True)
     mark = JSONField('Marcación')
     profitability_rate = JSONField('Porcentaje de rentabilidad')
-    sale_value =  models.CharField('Valor venta', max_length=50)
-    transport =  models.CharField('Precio transporte', max_length=20)
+    sale_value =  models.CharField('Valor venta', max_length=50, null=True)
+    transport =  models.CharField('Precio transporte', max_length=20, null=True)
 
     date_created = models.DateTimeField('Fecha creación',auto_now_add=True)
     date_update = models.DateTimeField('Fecha última actualización',auto_now=True)

@@ -1,3 +1,4 @@
+from .login import LoginView
 from .profile import ProfileView
 from .profile import UserView
 from .client import ClientView

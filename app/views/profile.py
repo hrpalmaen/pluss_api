@@ -26,17 +26,16 @@ class ProfileView(ModelViewSet):
     serializer_class = ProfileSerializer
 
     def create(self, request):
-        print('entro acá', request.data)
         queryset = User.objects.filter(username=request.data['username'])
         try:
             if not queryset:
-                print('queryset', queryset)
                 user = User()
                 user.first_name = request.data['first_name']
                 user.username = request.data['username']
-                user.password = request.data['identification_number']
-                user.email = request.data['username']
+                user.password = request.data['password']
+                user.email = request.data['email']
                 user.save()
+                print('user',user)
 
                 profile = Profile(user=user)
                 print('profile', profile)
@@ -44,11 +43,10 @@ class ProfileView(ModelViewSet):
                 profile.phone_number = request.data['phone_number']
                 profile.type_identification = request.data['type_identification']
                 profile.identification_number = request.data['identification_number']
-                print('profileprofile', profile)
                 profile.save()
-                print('profile', profile)
 
-                return Response({'detail': 'El usuario se creo correctamente'})
-            return Response({'error':"Ya existe un registro con este usuario"})
+                return Response({'detail': 'El usuario se creo correctamente'}, status=201)
+            return Response({'error':"Ya existe un registro con este usuario"}, status=400)
         except Exception as e:
-            return Response({'error': 'Hubo un problema guardando el usuario'})
+            print('error', e)
+            return Response({'error': e}, status=400)

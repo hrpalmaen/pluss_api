@@ -1,3 +1,4 @@
+from .login import UserSerializer
 from .profile import ProfileSerializer
 from .profile import UserSerializer
 from .client import ClientSerializer
