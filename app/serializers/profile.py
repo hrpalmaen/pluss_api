@@ -35,3 +35,9 @@ class ProfileSerializer(ModelSerializer):
     class Meta:
         model = Profile
         fields = ('__all__')
+
+class getProfileSerializer(ProfileSerializer):
+    '''
+    Serializador para consultar info usuarios
+    '''
+    user = UserSerializer()
