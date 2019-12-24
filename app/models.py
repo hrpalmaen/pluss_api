@@ -92,3 +92,13 @@ class Quotation(models.Model):
     class Meta:
         verbose_name = 'Cotización'
         db_table = 'cp_quotation'
+
+class QuotationTemp(models.Model):
+    '''
+    Modelo cotizaciones temporales
+    '''
+    data = JSONField('Info temporal')
+
+    class Meta:
+        verbose_name = 'Cotización temporal'
+        db_table = 'cp_quotationTemp'

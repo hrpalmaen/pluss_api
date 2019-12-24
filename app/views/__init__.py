@@ -3,5 +3,5 @@ from .profile import ProfileView
 from .profile import UserView
 from .client import ClientView
 from .product import ProductView
-from .quotation import QuotationView
+from .quotation import QuotationView, QuotationTempView
 from .group import GroupView

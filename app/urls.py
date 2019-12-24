@@ -1,5 +1,5 @@
 from django.urls import include, path
-from .views import LoginView, ProfileView, ClientView, ProductView, QuotationView, GroupView, UserView
+from .views import LoginView, ProfileView, ClientView, ProductView, QuotationView, GroupView, UserView, QuotationTempView
 from rest_framework import routers
 
 app_name = 'rutas'
@@ -11,6 +11,7 @@ router. register(r'group', GroupView)
 router.register(r'client', ClientView)
 router.register(r'product', ProductView)
 router.register(r'quotation', QuotationView)
+router.register(r'quotationtemp', QuotationTempView)
 
 urlpatterns = [
     path(r'', include(router.urls))
