@@ -5,3 +5,4 @@ from .client import ClientView
 from .product import ProductView
 from .quotation import QuotationView, QuotationTempView
 from .group import GroupView
+from .general import GeneralView

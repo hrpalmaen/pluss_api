@@ -4,3 +4,4 @@ from .client import ClientSerializer
 from .product import ProductSerializer
 from .quotation import QuotationSerializer, QuotationTempSerializer
 from .group import GroupSerializer
+from .general import GeneralSerializer

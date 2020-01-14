@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import time
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+HOST_DB = os.environ.get("HOST_DB", default=0)
+print('**********', HOST_DB)
+time.sleep(5) # Delay for 5 seconds
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -60,7 +63,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
+        'APP_DIRS': True, 
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -82,10 +85,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'cotizaciones_pluss',
-        'USER':'kamehouse@kamehouse',
-        'PASSWORD': 'Pepe1234',
-        'HOST': 'kamehouse.postgres.database.azure.com',
-        'PORT': '5432',
+    	'USER': 'pluss',
+    	'PASSWORD': 'maestr8_kar1n',
+    	'HOST': HOST_DB,
+    	'PORT': '5432',
+        # 'NAME': 'cotizaciones_pluss',
+        # 'USER':'kamehouse@kamehouse',
+        # 'PASSWORD': 'Pepe1234',
+        # 'HOST': 'kamehouse.postgres.database.azure.com',
+        # 'PORT': '5432',
     }
 }
 
