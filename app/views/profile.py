@@ -60,9 +60,3 @@ class ProfileView(ModelViewSet):
             return Response({'error':"Ya existe un registro con este usuario"}, status=400)
         except Exception as e:
             return Response({'error': e}, status=400)
-
-    def update(self, request, pk=None):
-        '''
-        Vista de actualización del usuario
-        '''
-        print('entro por el update', self, request)
