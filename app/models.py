@@ -54,13 +54,16 @@ class Product(models.Model):
     '''
     Modelo de productos
     '''
-    illustration = models.CharField('Imagen', max_length=500, null=True)
-    name = models.CharField('Nombre del producto', max_length=100, null=True)
+    referency_id = models.CharField('Identificador producto', max_length=64, null=True)
+    provier_name = models.CharField('Nombre del proveedor', max_length=64, null=True)
+    illustration = models.CharField('Imagen', max_length=512, null=True)
+    name = models.CharField('Nombre del producto', max_length=128, null=True)
     detail = models.CharField('Descripción del producto', max_length=500, null=True)
-    measurements = models.CharField('Medidas', max_length=20, null=True)
-    color = models.CharField('colores disponibles', max_length=50, null=True)
-    mark_type = models.CharField('Tipo de marcación', max_length=50, null=True)
-    material = models.CharField('Material del producto', max_length=50, null=True)
+    measurements = models.CharField('Medidas', max_length=128, null=True)
+    color = models.CharField('colores disponibles', max_length=128, null=True)
+    mark_type = models.CharField('Tipo de marcación', max_length=128, null=True)
+    material = models.CharField('Material del producto', max_length=128, null=True)
+    more_info = models.JSONField() 
     
     def __str__(self):
         return f'{self.name}'
