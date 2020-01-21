@@ -38,6 +38,9 @@ class Client(models.Model):
     phone = models.CharField('Número telefónico', max_length=30)
     agent = JSONField('Asesor de venta')
     city = models.CharField('Ciudad', max_length=150)
+    phone_two = models.CharField('Número telefónico alyternativo', max_length=30, null=True)
+    email = models.CharField('Correo electrónico', max_length=150, null=True)
+    address = models.CharField('Número telefónico', max_length=150, null=True)
 
     date_created = models.DateTimeField('Fecha creación',auto_now_add=True)
     date_update = models.DateTimeField('Fecha última actualización',auto_now=True)
@@ -81,12 +84,7 @@ class Quotation(models.Model):
     delivery_time = models.CharField('Tiempo de entrega', max_length=5, null=True)
     pay_format = models.CharField('Formato de pago', max_length=10, null=True)
     units = JSONField('Unidades a evaluar')
-    cost = models.CharField('Costo', max_length=20, null=True)
-    discount_rate = models.CharField('Porcentaje de descuento', max_length=5, null=True)
-    mark = JSONField('Marcación')
-    profitability_rate = JSONField('Porcentaje de rentabilidad')
-    sale_value =  models.CharField('Valor venta', max_length=50, null=True)
-    transport =  models.CharField('Precio transporte', max_length=20, null=True)
+    products = JSONField('Productos')
 
     date_created = models.DateTimeField('Fecha creación',auto_now_add=True)
     date_update = models.DateTimeField('Fecha última actualización',auto_now=True)

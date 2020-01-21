@@ -24,7 +24,7 @@ time.sleep(5) # Delay for 5 seconds
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '8r9l9cc)!dqwde#=u%p(y_!)c((s0m-ws5mbb@e@31z#qhhjj!'
-
+ 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -87,8 +87,8 @@ DATABASES = {
         'NAME': 'cotizaciones_pluss',
     	'USER': 'pluss',
     	'PASSWORD': 'maestr8_kar1n',
-    	'HOST': HOST_DB,
-    	'PORT': '5432',
+    	'HOST': '174.138.41.183',
+    	'PORT': '5433',
         # 'NAME': 'cotizaciones_pluss',
         # 'USER':'kamehouse@kamehouse',
         # 'PASSWORD': 'Pepe1234',
