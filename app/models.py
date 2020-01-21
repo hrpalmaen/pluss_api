@@ -66,7 +66,7 @@ class Product(models.Model):
     color = models.CharField('colores disponibles', max_length=128, null=True)
     mark_type = models.CharField('Tipo de marcación', max_length=128, null=True)
     material = models.CharField('Material del producto', max_length=128, null=True)
-    more_info = models.JSONField() 
+    more_info = JSONField('Información adiccional', default=dict)
     
     def __str__(self):
         return f'{self.name}'
