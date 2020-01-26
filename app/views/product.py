@@ -1,7 +1,8 @@
 from rest_framework.viewsets import ModelViewSet
 from app.models import Product
-from app.serializers import ProductSerializer, ProductFilter
+from app.serializers import ProductSerializer, ProductFilter, ProductPagination
 from django_filters import rest_framework as filters
+from rest_framework.pagination import PageNumberPagination
 
 class ProductView(ModelViewSet):
     '''
@@ -11,6 +12,7 @@ class ProductView(ModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ProductFilter
+    pagination_class = ProductPagination
 
     # '^' Starts-with search.
     # '=' Exact matches.
