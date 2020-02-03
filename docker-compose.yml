@@ -1,8 +1,8 @@
 version: '3.7'
 services:
    api:
-      image: cristhiankr/pluss_api:v1
-      # build: .
+      # image: cristhiankr/pluss_api:v1
+      build: .
       container_name: api_pluss
       command: ["import time", "time.sleep(15) # Delay for 5 seconds"]
       # command: python manage.py migrate
