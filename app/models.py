@@ -35,12 +35,14 @@ class Client(models.Model):
     Modelo de clientes
     '''
     name = models.CharField('Nombre cliente', max_length=100)
+    nit = models.CharField('Nit', max_length=25)
     phone = models.CharField('Número telefónico', max_length=30)
-    agent = JSONField('Asesor de venta')
+    agent = models.CharField('Asesor de venta', max_length=150)
     city = models.CharField('Ciudad', max_length=150)
-    phone_two = models.CharField('Número telefónico alyternativo', max_length=30, null=True)
+    phone_two = models.CharField('Número telefónico alternativo', max_length=30, null=True)
     email = models.CharField('Correo electrónico', max_length=150, null=True)
     address = models.CharField('Número telefónico', max_length=150, null=True)
+    dependece = models.CharField('Dependencia o área', max_length=100)
 
     date_created = models.DateTimeField('Fecha creación',auto_now_add=True)
     date_update = models.DateTimeField('Fecha última actualización',auto_now=True)
@@ -81,6 +83,7 @@ class Quotation(models.Model):
     delivery_time = models.CharField('Tiempo de entrega', max_length=5, null=True)
     pay_format = models.CharField('Formato de pago', max_length=10, null=True)
     units = JSONField('Unidades a evaluar')
+    status = models.CharField('Estado cotización', max_length=20)
     products = JSONField('Productos')
 
     date_created = models.DateTimeField('Fecha creación',auto_now_add=True)
