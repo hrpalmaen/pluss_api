@@ -1,7 +1,8 @@
 # from rest_framework.serializers import ModelSerializer, CharField
 from rest_framework import serializers
 from app.serializers import ClientSerializer, UserSerializer
-from app.models import Quotation, QuotationTemp
+from app.models import Quotation
+import django_filters
 
 class QuotationSerializer(serializers.ModelSerializer):
     '''
@@ -33,10 +34,14 @@ class getQuotationSerializer(QuotationSerializer):
     client = ClientSerializer()
     user = UserSerializer()
 
-class QuotationTempSerializer(serializers.ModelSerializer):
+
+class QuotationFilter(django_filters.FilterSet):
     '''
-    Serializador para cotizaciones temporales
+    Filtros para cotizaciones
     '''
+
     class Meta:
-        model = QuotationTemp
-        fields = ('__all__')
+        model = Quotation
+        fields = {
+            'id': ['exact']
+        }

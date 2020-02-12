@@ -7,7 +7,6 @@ from .views import (
     QuotationView, 
     GroupView, 
     UserView, 
-    QuotationTempView,
     GeneralView 
     )
 # from . import views
@@ -30,7 +29,6 @@ router.register(r'group', GroupView)
 router.register(r'client', ClientView)
 router.register(r'product', ProductView)
 router.register(r'quotation', QuotationView)
-router.register(r'quotationtemp', QuotationTempView)
 urlpatterns = [
     path('example1/', GeneralView.as_view(Model=Product, Serializer=ProductSerializer)),
     path('example2/', GeneralView.as_view(Model=Client, Serializer=ClientSerializer)),
