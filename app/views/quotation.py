@@ -6,6 +6,7 @@ from app.models import Quotation, Client
 from app.serializers import QuotationSerializer, QuotationFilter, getQuotationSerializer
 
 from django.core.mail import send_mail
+from django.conf import settings
 import re
 
 class QuotationView(ModelViewSet):
@@ -54,12 +55,13 @@ class QuotationView(ModelViewSet):
                     send_mail(
                         subject= 'prueba',
                         message='envio de la url de la cotización',
-                        from_email= 'ccdelgadop@gmail.com',
+                        from_email= settings.EMAIL_HOST_USER,
                         recipient_list=[email]
                     )
                 except Exception as e:
                     print('error en send_email', e)
             except Exception as e:
+                print('error 1', e)
                 return Response({'error': 'Error consultando la informaicón del usuario'})
 
 
@@ -68,12 +70,11 @@ class QuotationView(ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def pdf(self, request,**response_kwargs):
-        content_type='application/xml'
+        # content_type='application/xml'
         '''
         Vista para construir pdf
         '''
-        print('selffffffffffffffffffffffff', self)
         dat= request
-        print(str(request.data))
+        print(dat)
 
         return Response({'queeeeeee': 'llego'})
