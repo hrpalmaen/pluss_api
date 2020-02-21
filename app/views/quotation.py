@@ -7,6 +7,8 @@ from app.serializers import QuotationSerializer, QuotationFilter, getQuotationSe
 
 from django.core.mail import send_mail
 from django.conf import settings
+import pdfkit
+# import wkhtmltopdf
 import re
 
 class QuotationView(ModelViewSet):
@@ -74,7 +76,8 @@ class QuotationView(ModelViewSet):
         '''
         Vista para construir pdf
         '''
-        dat= request
-        print(dat)
+        # config = pdfkit.configuration(wkhtmltopdf="path_to_exe")
+        # wkhtmltopdf(url='http://localhost:3000/cotizacion/6/', output_file='example.pdf')
+        pdfkit.from_url('http://localhost:3000/cotizacion/6/', 'out.pdf')#, configuration = config) 
 
         return Response({'queeeeeee': 'llego'})
