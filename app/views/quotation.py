@@ -8,8 +8,8 @@ from app.serializers import QuotationSerializer, QuotationFilter, getQuotationSe
 from django.core.mail import send_mail
 from django.conf import settings
 import pdfkit
-# import wkhtmltopdf
 import re
+from django.http import HttpResponse
 
 class QuotationView(ModelViewSet):
     '''
@@ -72,12 +72,14 @@ class QuotationView(ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def pdf(self, request,**response_kwargs):
-        # content_type='application/xml'
         '''
         Vista para construir pdf
         '''
-        # config = pdfkit.configuration(wkhtmltopdf="path_to_exe")
-        # wkhtmltopdf(url='http://localhost:3000/cotizacion/6/', output_file='example.pdf')
-        pdfkit.from_url('http://localhost:3000/cotizacion/6/', 'out.pdf')#, configuration = config) 
+        print('entro')
+        # response = HttpResponse(content_type='application/pdf')
+        # response['Content-Disposition'] = 'attachment; filename="etiqueta-envio.pdf"'
+        # response['Content-Disposition'] = 'attachment; filename=campaign.pdf' #'attachment; filename=campaign_{0}.pdf'.format('export')
+
+        pdfkit.from_url('https://medium.com/@rogs/c%C3%B3mo-hacer-un-pdf-con-python-y-html-b42f21dca65', 'out.pdf')
 
         return Response({'queeeeeee': 'llego'})
