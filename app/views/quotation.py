@@ -13,7 +13,7 @@ from django.http import HttpResponse
 
 class QuotationView(ModelViewSet):
     '''
-    Vista de corizaciones
+    Vista de cotizaciones
     '''
     queryset = Quotation.objects.all()
 
@@ -71,15 +71,24 @@ class QuotationView(ModelViewSet):
         return Response({'whasssss': 'siii algo'})
 
     @action(detail=False, methods=['post'])
-    def pdf(self, request,**response_kwargs):
+    def pdf(self, request, **response_kwargs):
         '''
         Vista para construir pdf
         '''
-        print('entro')
-        # response = HttpResponse(content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename="etiqueta-envio.pdf"'
-        # response['Content-Disposition'] = 'attachment; filename=campaign.pdf' #'attachment; filename=campaign_{0}.pdf'.format('export')
+        url = request.data
 
-        pdfkit.from_url('https://medium.com/@rogs/c%C3%B3mo-hacer-un-pdf-con-python-y-html-b42f21dca65', 'out.pdf')
+        pdf_settings = {
+            'page-size': 'Letter',
+            'margin-top': '0.25in',
+            'margin-right': '0.25in',
+            'margin-bottom': '0.25in',
+            'margin-left': '0.25in',
+            'encoding': "UTF-8",
+            'no-outline': None
+        }
 
-        return Response({'queeeeeee': 'llego'})
+        pdf = pdfkit.from_url('https://www.pythoncircle.com/post/470/generating-and-returning-pdf-as-response-in-django/', False)#, options=pdf_settings)
+
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Cotizacion.pdf'#.format('export')
+        return response
