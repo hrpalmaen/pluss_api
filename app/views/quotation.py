@@ -5,9 +5,16 @@ from rest_framework import status
 from app.models import Quotation, Client
 from app.serializers import QuotationSerializer, QuotationFilter, getQuotationSerializer
 
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+
+
 from django.conf import settings
+
 import pdfkit
+
 import re
 from django.http import HttpResponse
 
@@ -21,7 +28,7 @@ class QuotationView(ModelViewSet):
         if self.request.method == 'GET':
             return getQuotationSerializer
         return QuotationSerializer
-
+    
     @action(detail=False, methods=['post'])
     def send_email(self, request):
         '''
@@ -30,6 +37,8 @@ class QuotationView(ModelViewSet):
         data = request.data
         errors = {}
         obl_alert =  'Este campo es requerido'
+        file_attachment = self.pdf(request)
+        print('aaa: ', file_attachment)
 
         if not data['subject']:
             print('entro al subject')
@@ -51,22 +60,31 @@ class QuotationView(ModelViewSet):
 
                 if not validate_email:
                     return Response({'error': 'El email asociado al cliente no es válido'})
-
+                try:
+                    pdf_file = MIMEApplication(file_attachment, "pdf")
+                    pdf_file.add_header('content-Disposition', 'attachment', filename'cotizacion.pdf)
                 try:
                     print('email', email)
-                    send_mail(
-                        subject= 'prueba',
-                        message='envio de la url de la cotización',
-                        from_email= settings.EMAIL_HOST_USER,
-                        recipient_list=[email]
-                    )
+
+                    msg = MIMEMultipart()
+                    msg['From'] = settings.EMAIL_HOST_USER
+                    msg['To'] = email
+                    msg['Subject'] = 'prueba'
+
+                    msg.attach(pdf_file)
+
+                    # send_mail(
+                    #     subject= 'prueba',
+                    #     message='envio de la url de la cotización',
+                    #     from_email= settings.EMAIL_HOST_USER,
+                    #     recipient_list=[email],
+                    #     attach('design.png', img_data, 'image/png')
+                    # )
                 except Exception as e:
                     print('error en send_email', e)
             except Exception as e:
                 print('error 1', e)
                 return Response({'error': 'Error consultando la informaicón del usuario'})
-
-
 
         return Response({'whasssss': 'siii algo'})
 
@@ -75,6 +93,7 @@ class QuotationView(ModelViewSet):
         '''
         Vista para construir pdf
         '''
+        print('url: ', request)
         url = request.data
 
         pdf_settings = {
@@ -87,8 +106,9 @@ class QuotationView(ModelViewSet):
             'no-outline': None
         }
 
+        print('*******ENTRO*******')
         pdf = pdfkit.from_url('https://www.pythoncircle.com/post/470/generating-and-returning-pdf-as-response-in-django/', False)#, options=pdf_settings)
-
+        print('*******SALIO*******')
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="Cotizacion.pdf'#.format('export')
         return response
