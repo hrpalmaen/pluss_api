@@ -23,6 +23,23 @@ class QuotationView(ModelViewSet):
     '''
     queryset = Quotation.objects.all()
 
+    def build_pdf(self):
+        pdf_settings = {
+            'page-size': 'Letter',
+            'margin-top': '0.25in',
+            'margin-right': '0.25in',
+            'margin-bottom': '0.25in',
+            'margin-left': '0.25in',
+            'encoding': "UTF-8",
+            'no-outline': None
+        }
+
+        print('entro al pdf _ 2 **************************************')
+        pdf = pdfkit.from_url('https://www.pythoncircle.com/post/470/generating-and-returning-pdf-as-response-in-django/', False)#, options=pdf_settings)
+        # print('pdf: ', pdf)
+        print('Sigue ++++++++++++++++++++++++++++++++++++++++++')
+        return pdf
+
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return getQuotationSerializer
@@ -36,8 +53,6 @@ class QuotationView(ModelViewSet):
         data = request.data
         errors = {}
         obl_alert =  'Este campo es requerido'
-        print('obl_alert: ', obl_alert)
-        
 
         if not data['subject']:
             errors['subject'] = obl_alert
@@ -47,16 +62,8 @@ class QuotationView(ModelViewSet):
             errors['client'] = 'El campo cliente de la cotización es requerido'
         if errors:
             return Response(errors, status=400)
-
-        attachments = []
-        try:
-            # pdfkit.from_url('https://www.pythoncircle.com/post/711/hello-word-in-django-2-how-to-start-with-django-2/', "prueba.pdf")
-            file_attachment = self.pdf(request)
-            print('file_attachment: ', file_attachment)
-        except Exception as e:
-            print('error pdf', e)
+        
         if data['status'] == "Finalizado":
-
             try:
                 current_client = Client.objects.get(id=data['client'])
                 print('current_client', current_client)
@@ -65,15 +72,10 @@ class QuotationView(ModelViewSet):
 
                 if not validate_email:
                     return Response({'error': 'El email asociado al cliente no es válido'})
-                    
                 try:
-                    content = open(file_attachment, 'rb').read() 
-                    attachment = (file_attachment, content, 'application/pdf')
-                    attachments.append(attachment)
-                    print('attachments: ', attachments)
+                    file_attachment = self.build_pdf()
                 except Exception as e:
                     print('error pdf', e)
-
                 try:
                     print('email', email)
 
@@ -88,9 +90,9 @@ class QuotationView(ModelViewSet):
                         'prueba con adjunto',
                         'prueba no se que va acá',
                         settings.EMAIL_HOST_USER,
-                        [email],
-                        attachments=attachments
-                    )                   
+                        [email]
+                    )
+                    email.attach('Cotizacion.pdf', file_attachment, 'application/pdf')
                     email.send()
 
                 except Exception as e:
@@ -108,21 +110,8 @@ class QuotationView(ModelViewSet):
         '''
         print('url: ', request)
         url = request.data
-
-        pdf_settings = {
-            'page-size': 'Letter',
-            'margin-top': '0.25in',
-            'margin-right': '0.25in',
-            'margin-bottom': '0.25in',
-            'margin-left': '0.25in',
-            'encoding': "UTF-8",
-            'no-outline': None
-        }
-
-        print('entro al pdf')
-        pdf = pdfkit.from_url('https://www.pythoncircle.com/post/470/generating-and-returning-pdf-as-response-in-django/', False)#, options=pdf_settings)
-        print('pdf: ', pdf)
-        response = HttpResponse(pdf, content_type='application/pdf')
+        new_pdf = self.build_pdf()
+        response = HttpResponse(new_pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="Cotizacion.pdf'#.format('export')
         return response
-
+    
