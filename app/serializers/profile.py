@@ -17,7 +17,6 @@ class ProfileSerializer(ModelSerializer):
     # def create(self, validated_data):
     #     groups_data = validated_data.pop('group')
     #     queryset = User.objects.filter(username__iexact=validated_data['username'])
-    #     print('queryset', queryset)
     #     if not queryset:
     #         user = User()
     #         user.first_name = validated_data['first_name']
@@ -28,7 +27,6 @@ class ProfileSerializer(ModelSerializer):
 
     #         # user = User.objects.create_user(**validated_data)
     #         user.groups.set(groups_data) 
-    #         print('user', user)
     #         return user
     #     raise ValidationError("Ya existe un registro igual")
 
