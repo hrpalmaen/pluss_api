@@ -6,10 +6,8 @@ class GeneralSerializer(ModelSerializer):
         '''
         Serializador generico
         '''
-        print('ENtramos--------------------------------')
         self.Model = Model
     class Meta:
-        print('ENtramos--------------2------------------')
         def __init__(self):
         #     self.Model = Model
         #     self.fields = ('__all__')

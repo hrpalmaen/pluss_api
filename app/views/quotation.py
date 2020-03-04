@@ -32,10 +32,12 @@ class QuotationView(ModelViewSet):
         Vista para envio de email a cliente
         '''
         data = request.data
+        print('data: ', data)
         subject = request.data['subject']
         send_copy = request.data['send_copy']
         body = data['message']
         client = data['client']
+        # url = data['url']
 
         obl_alert =  'Este campo es requerido.'
         errors = {}
@@ -59,7 +61,7 @@ class QuotationView(ModelViewSet):
                     return Response({'error': 'El email asociado al cliente no es válido'}, status=400)
 
                 try:
-                    file_attachment = self.build_pdf()
+                    file_attachment = self.build_pdf(data)
                 except Exception as e:
                     return Response({'error': 'Se presento problemas generando el pdf.'}, status=400)
 
@@ -87,18 +89,18 @@ class QuotationView(ModelViewSet):
         '''
         Vista para construir pdf
         '''
-        url = request.data
-
-        new_pdf = self.build_pdf()
+        new_pdf = self.build_pdf(request.data)
         response = HttpResponse(new_pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="Cotizacion.pdf'#.format('export')
         return response
 
 
-    def build_pdf(self):
+    def build_pdf(self, request):
         '''
         Función para construir pdf
         '''
+        url = request['url']
+
         pdf_settings = {
             'page-size': 'Letter',
             'margin-top': '0.25in',
@@ -108,7 +110,6 @@ class QuotationView(ModelViewSet):
             'encoding': "UTF-8",
             'no-outline': None
         }
-
         pdf = pdfkit.from_url('https://www.pythoncircle.com/post/470/generating-and-returning-pdf-as-response-in-django/', False)#, options=pdf_settings)
 
         return pdf
