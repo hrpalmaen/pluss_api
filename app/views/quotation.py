@@ -28,13 +28,14 @@ class QuotationView(ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def send_email(self, request):
+        print('request: ', request.data)
         '''
         Vista para envio de email a cliente
         '''
         data = request.data
-        subject = request.data['subject']
-        send_copy = request.data['send_copy']
-        body = data['message']
+        subject = request.data.email['subject']
+        send_copy = request.data.email['send_copy']
+        body = data.email['message']
         client = data['client']
 
         obl_alert =  'Este campo es requerido.'
