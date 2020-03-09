@@ -1,11 +1,15 @@
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import User
+from app.models import Profile
 # from django.contrib import User
 from django.contrib.auth import authenticate
-from app.serializers import UserSerializer
+from app.serializers import UserSerializer, ProfileSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
+
+from django.http import JsonResponse
+from django.core.serializers import serialize
 
 class LoginView(ModelViewSet):
     '''
@@ -13,21 +17,6 @@ class LoginView(ModelViewSet):
     '''
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    # def create(self, request):
-    #     username = request.data['username']
-    #     password = request.data['password']
-    #     print('username', username, password)
-    #     user = authenticate(username=username, password=password)
-    #     print('user', user)
-    #     if user is not None:
-    #         print('es')
-    #         return Response({'detail': 'Existe'})
-    #         # A backend authenticated the credentials
-    #     else:
-    #         print('no es')
-    #         return Response({'detail': 'No existe'}, status=400)
-    
 
     def create(self, request):
         errors = {}
@@ -42,9 +31,12 @@ class LoginView(ModelViewSet):
         if len(errors) > 0:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         
-        user = User.objects.filter(username=username, password=password)
-        
+        user = User.objects.filter(username=username, password=password).values()
+        # dddddd = ProfileSerializer(instance=list(Profile.objects.filter(user__username=username, user__password=password)), many=True).data
+        # user.username = user
+        print('user',user[0])
         if user:
-            return Response({'detail': 'Autenticación realizada con éxito'}, status=200)
+            # return Response({'detail': user}, status=200)
+            return JsonResponse(list(user), safe=False)
         else:
             return Response({'detail': 'El usuario no se encuentra registrado.'}, status=status.HTTP_401_UNAUTHORIZED)
