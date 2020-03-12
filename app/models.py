@@ -14,8 +14,8 @@ class Profile(models.Model):
     ]
 
     user = models.OneToOneField(User, verbose_name='Usuario', on_delete=models.CASCADE)
-    code = models.CharField('Código usuario', max_length=30)
-    phone_number = models.CharField('Número telefónico', max_length=30)
+    code = models.CharField('Código usuario', max_length=30, null=True)
+    phone_number = models.CharField('Número telefónico', max_length=30, null=True)
     type_identification = models.CharField('Tipo de identificación', choices=TYPE_DOCUMENT, max_length=50)
     identification_number = models.CharField('Documento', max_length=20, unique=True)
 
@@ -39,9 +39,9 @@ class Client(models.Model):
     phone = models.CharField('Número telefónico', max_length=30)
     agent = models.CharField('Asesor de venta', max_length=150)
     city = models.CharField('Ciudad', max_length=150)
-    phone_two = models.CharField('Número telefónico alternativo', max_length=30, null=True)
+    phone_two = models.CharField('Número telefónico alternativo', max_length=30, null=True, blank=True)
     email = models.CharField('Correo electrónico', max_length=150, null=True)
-    address = models.CharField('Número telefónico', max_length=150, null=True)
+    address = models.CharField('Número telefónico', max_length=150, null=True, blank=True)
     dependece = models.CharField('Dependencia o área', max_length=100)
 
     date_created = models.DateTimeField('Fecha creación',auto_now_add=True)
@@ -97,12 +97,12 @@ class Quotation(models.Model):
         verbose_name = 'Cotización'
         db_table = 'cp_quotation'
 
-class QuotationTemp(models.Model):
-    '''
-    Modelo cotizaciones temporales
-    '''
-    data = JSONField('Info temporal')
+# class QuotationTemp(models.Model):
+#     '''
+#     Modelo cotizaciones temporales
+#     '''
+#     data = JSONField('Info temporal')
 
-    class Meta:
-        verbose_name = 'Cotización temporal'
-        db_table = 'cp_quotationTemp'
+#     class Meta:
+#         verbose_name = 'Cotización temporal'
+#         db_table = 'cp_quotationTemp'

@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
+from django.contrib.auth.models import User, Group
 
 from django.contrib.auth import get_user_model
 from app.models import Profile
@@ -32,31 +33,64 @@ class ProfileView(ModelViewSet):
         return ProfileSerializer
 
     def create(self, request):
-        queryset = User.objects.filter(username=request.data['username'])
+        print('request: ', request.data)
+        '''
+        Vista para crear usuarios
+        '''
+
+        serializer = ProfileSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+        
         try:
-            if not queryset:
-                try:
-                    user = User()
-                    user.first_name = request.data['first_name']
-                    user.username = request.data['username']
-                    user.password = request.data['password']
-                    user.email = request.data['username']
-                    user.save()
-                except:
-                    return Response({'error':"No se pudo crear el usuario, por favor vuelva a intentarlo."}, status=400)
-                # user = User.objects.create(request.data)
+            group = Group.objects.get(id=request.data['groups'])
 
-                try:
-                    profile = Profile(user=user)
-                    profile.code = request.data['code']
-                    profile.phone_number = request.data['phone_number']
-                    profile.type_identification = request.data['type_identification']
-                    profile.identification_number = request.data['identification_number']
-                    profile.save()
-                except:
-                    return Response({'error':"No se guardo al información complementaria del usuario."}, status=400)
+            # user, create = User.objects.get_or_create(username=request.data['username'])
+            if create:
+                print('lo creo')
+            else:
+                print('entro por el else')
+            return Response({'error':"No se guardo al información complementaria del usuario."}, status=401)
+        except Exception as err:
+            print('err: ', err)
+            return Response({'error': 'No se encontró el grupo ingresado.'})
+        # try:
+        #     if not queryset:
+        #         try:
+        #             # groups = Group
+        #             try:
+        #                 # user = User.objects.create_user(
+        #                 #     username=request.data['username'],
+        #                 #     email=request.data['username'],
+        #                 #     password=request.data['password'],
+        #                 #     first_name=request.data['first_name']
+        #                 #     )
+        #                 # user.save()
+        #                 # group.user_set.add(user.id)
+        #             # user = User()
+        #             # user.first_name = request.data['first_name']
+        #             # user.username = request.data['username']
+        #             # user.password = request.data['password']
+        #             # user.email = request.data['username']
+        #             # user.save()
+        #             except:
+        #                 return Response({'error':''}, status=400)
+        #         except Exception as e:
+        #             print('error en userrrr: ', e)
+        #             return Response({'error':"No se pudo crear el usuario, por favor vuelva a intentarlo."}, status=400)
+        #         # user = User.objects.create(request.data)
 
-                return Response({'detail': 'El usuario se creo correctamente'}, status=201)
-            return Response({'error':"Ya existe un registro con este usuario"}, status=400)
-        except Exception as e:
-            return Response({'error': e}, status=400)
+        #         try:
+        #             profile = Profile(user=user)
+        #             profile.code = request.data['code']
+        #             profile.phone_number = request.data['phone_number']
+        #             profile.type_identification = request.data['type_identification']
+        #             profile.identification_number = request.data['identification_number']
+        #             profile.save()
+        #         except:
+        #             return Response({'error':"No se guardo al información complementaria del usuario."}, status=400)
+
+        #         return Response({'detail': 'El usuario se creo correctamente'}, status=201)
+        #     return Response({'error':"Ya existe un registro con este usuario"}, status=400)
+        # except Exception as e:
+        #     return Response({'error': e}, status=400)
