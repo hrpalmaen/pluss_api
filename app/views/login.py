@@ -1,42 +1,50 @@
+'''
+Archivo para vistas de autentición
+'''
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import User
-from app.models import Profile
-# from django.contrib import User
-from django.contrib.auth import authenticate
-from app.serializers import UserSerializer, ProfileSerializer
+from app.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
 
-from django.http import JsonResponse
-from django.core.serializers import serialize
 
 class LoginView(ModelViewSet):
     '''
     Vista de autenticación
     '''
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = User.objects.all()    
 
     def create(self, request):
-        errors = {}
+        '''
+        Módulo de logueo
+        '''
         username = request.data['username']
         password = request.data['password']
 
+        # serializer = UserSerializer(data=request.data)
+        # if not serializer.is_valid():
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        errors = {}
         if username == '' or username is None:
             errors['username'] = ['El correo electrónico es obligatorio.']
         if password == '' or password is None:
             errors['password'] = ['La contraseña es obligatoria.']
-
         if len(errors) > 0:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        user = User.objects.filter(username=username, password=password).values()
-        # dddddd = ProfileSerializer(instance=list(Profile.objects.filter(user__username=username, user__password=password)), many=True).data
-        # user.username = user
-        print('user',user[0])
-        if user:
-            # return Response({'detail': user}, status=200)
-            return JsonResponse(list(user), safe=False)
-        else:
+            
+        '''
+        Search data user with permissions
+        '''
+        try:
+            user = User.objects.get(username=username)           
+            if user.check_password(password):
+                permissions = user.groups.all()[0].name
+                return Response({'name': user.first_name, 'permission': permissions}, status=200)
+            else:
+                return Response({'detail': 'El usuario o la clave no son correctas.', status:status.HTTP_401_UNAUTHORIZED})
+        except Exception as e:
+            print('e: ', e)
             return Response({'detail': 'El usuario no se encuentra registrado.'}, status=status.HTTP_401_UNAUTHORIZED)
+

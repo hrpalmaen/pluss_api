@@ -148,4 +148,4 @@ EMAIL_HOST = 'smtp.office365.com'#'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'helita.13@hotmail.es'
-EMAIL_HOST_PASSWORD = 'samsung3389'
+EMAIL_HOST_PASSWORD = 'samsung1689'
