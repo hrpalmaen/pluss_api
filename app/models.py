@@ -60,13 +60,17 @@ class Product(models.Model):
     Modelo de productos
     '''
     referency_id = models.CharField('Identificador producto', max_length=64, null=True)
+    cod_product = models.CharField('Codigo del producto', max_length=64, null=True)
     provier_name = models.CharField('Nombre del proveedor', max_length=64, null=True)
-    illustration = models.CharField('Imagen', max_length=512, null=True)
+    image = models.CharField('Imagen', max_length=512, null=True)
     name = models.CharField('Nombre del producto', max_length=128, null=True)
+    description = models.CharField('Descripción del producto', max_length=512, null=True)
+    inventory = models.CharField('Existencia', max_length=64, null=True)
+    cost = models.FloatField('Costo de compra', null=True)
     detail = models.CharField('Descripción del producto', max_length=500, null=True)
-    measurements = models.CharField('Medidas', max_length=128, null=True)
-    color = models.CharField('colores disponibles', max_length=128, null=True)
-    mark_type = models.CharField('Tipo de marcación', max_length=128, null=True)
+    size = models.CharField('Medidas', max_length=128, null=True)
+    colors = models.CharField('colores disponibles', max_length=128, null=True)
+    prints = models.CharField('Tipo de marcación', max_length=128, null=True)
     material = models.CharField('Material del producto', max_length=128, null=True)
     more_info = JSONField('Información adiccional', default=dict)
     
