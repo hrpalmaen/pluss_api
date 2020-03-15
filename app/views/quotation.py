@@ -28,7 +28,6 @@ class QuotationView(ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def send_email(self, request):
-        print('request: ', request.data)
         '''
         Vista para envio de email a cliente
         '''

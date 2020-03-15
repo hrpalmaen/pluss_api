@@ -1,3 +1,6 @@
+'''
+Archivo de vistas de usuarios
+'''
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from django.contrib.auth.models import User, Group
@@ -33,64 +36,112 @@ class ProfileView(ModelViewSet):
         return ProfileSerializer
 
     def create(self, request):
-        print('request: ', request.data)
         '''
         Vista para crear usuarios
         '''
-
+        #Validate data with serializer
         serializer = ProfileSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
         
         try:
-            group = Group.objects.get(id=request.data['groups'])
+            #Search user current
+            user_current = Profile.objects.get(user__username=request.data['username'])
+            return Response({'error': 'El usuario ya se encuentra creado en el aplicativo.'}, status=400)
+        except:            
+            try:
+                #Validate correct group
+                group = Group.objects.get(id=request.data['groups'])
+                try:
+                    #Save user in modalnative django
+                    user = User.objects.create_user(
+                        username = request.data['username'],
+                        password = request.data['password'],
+                        first_name = request.data['first_name'],
+                        email = request.data['username'],
+                        is_active = True
+                        )
+                    group.user_set.add(user.id)
+                    try:
+                        #Save info complementary in model profile
+                        profile = Profile.objects.create(
+                            user = user,
+                            code = request.data['code'],
+                            phone_number = request.data['phone_number'],
+                            type_identification = request.data['type_identification'],
+                            identification_number = request.data['identification_number']
+                        )
+                        return Response({
+                            'id':profile.id,
+                            'user':{
+                                'id': user.id,
+                                'first_name':user.first_name, 
+                                'username':user.username,
+                                'groups': group.id
+                                }, 
+                            'code':profile.code, 
+                            'identification_number':profile.identification_number, 
+                            'phone_number':profile.phone_number
+                            }, status=200)
+                    except:
+                        return Response({'error': 'No se pudo crear el usuario, vuelva a intentarlo.'}, status=400)
+                except:
+                    return Response({'error': 'No se puso guardar el usuario.'}, status=400)
+            except :
+                return Response({'error': 'No se encontró el tipo de usuario seleccionado. Contacte al administrador.'}, status=400)
 
-            # user, create = User.objects.get_or_create(username=request.data['username'])
-            if create:
-                print('lo creo')
-            else:
-                print('entro por el else')
-            return Response({'error':"No se guardo al información complementaria del usuario."}, status=401)
-        except Exception as err:
-            print('err: ', err)
-            return Response({'error': 'No se encontró el grupo ingresado.'})
-        # try:
-        #     if not queryset:
-        #         try:
-        #             # groups = Group
-        #             try:
-        #                 # user = User.objects.create_user(
-        #                 #     username=request.data['username'],
-        #                 #     email=request.data['username'],
-        #                 #     password=request.data['password'],
-        #                 #     first_name=request.data['first_name']
-        #                 #     )
-        #                 # user.save()
-        #                 # group.user_set.add(user.id)
-        #             # user = User()
-        #             # user.first_name = request.data['first_name']
-        #             # user.username = request.data['username']
-        #             # user.password = request.data['password']
-        #             # user.email = request.data['username']
-        #             # user.save()
-        #             except:
-        #                 return Response({'error':''}, status=400)
-        #         except Exception as e:
-        #             print('error en userrrr: ', e)
-        #             return Response({'error':"No se pudo crear el usuario, por favor vuelva a intentarlo."}, status=400)
-        #         # user = User.objects.create(request.data)
+    def update(sefl, request, pk=None):
+        '''
+        Vista para actualizar usuario
+        '''
+        # serializer = ProfileSerializer(data=request.data)
+        # if not serializer.is_valid():
+        #     return Response(serializer.errors, status=400)
 
-        #         try:
-        #             profile = Profile(user=user)
-        #             profile.code = request.data['code']
-        #             profile.phone_number = request.data['phone_number']
-        #             profile.type_identification = request.data['type_identification']
-        #             profile.identification_number = request.data['identification_number']
-        #             profile.save()
-        #         except:
-        #             return Response({'error':"No se guardo al información complementaria del usuario."}, status=400)
+        try:
+            profile = Profile.objects.get(id=pk)
 
-        #         return Response({'detail': 'El usuario se creo correctamente'}, status=201)
-        #     return Response({'error':"Ya existe un registro con este usuario"}, status=400)
-        # except Exception as e:
-        #     return Response({'error': e}, status=400)
+            profile.code = request.data['code']
+            profile.identification_number = request.data['identification_number']
+            profile.phone_number = request.data['phone_number']
+            profile.type_identification = request.data['type_identification']
+            # for value in request.data:
+            #     setattr(profile, value, request.data[str(value)])
+            profile.save()
+            try:
+                group = Group.objects.get(id=request.data['groups'])
+
+                try:
+                    user = User.objects.get(id=profile.user_id)
+                    # for value in request.data:
+                    #     setattr(user, value, request.data[str(value)])
+                    user.first_name = request.data['first_name']
+                    user.username = request.data['username']
+                    # user.password = request.data['password']
+                    user.save()
+
+                    #validate groups user for save new
+                    group_current = user.groups.all()[0]
+                    if group_current.name != group:
+                        user.groups.clear()
+                        group.user_set.add(user.id)
+                    return Response({
+                        'id': profile.id,
+                        'code': profile.code,
+                        'user':{
+                            'id': user.id,
+                            'first_name': user.first_name,
+                            'username': user.username,
+                            'groups': group.id
+                        },
+                        'identification_number': profile.identification_number,
+                        'phone_number': profile.phone_number},
+                        status=200)
+                except:
+                    return Response({'Se presento problemas actualizando el usuario.'}, status=400)
+
+            except:
+                return Response({'error': 'No se encontró el tipo de usuario seleccionado. Contacte al administrador.'})
+
+        except:
+            return Response({'error': 'No se pudo consultar la información del usuario'})                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    

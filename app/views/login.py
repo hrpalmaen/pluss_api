@@ -40,11 +40,9 @@ class LoginView(ModelViewSet):
         try:
             user = User.objects.get(username=username)           
             if user.check_password(password):
-                permissions = user.groups.all()[0].name
+                permissions = user.groups.all()[0].name#user.get_all_permissions()#
                 return Response({'name': user.first_name, 'permission': permissions}, status=200)
             else:
                 return Response({'detail': 'El usuario o la clave no son correctas.', status:status.HTTP_401_UNAUTHORIZED})
-        except Exception as e:
-            print('e: ', e)
+        except:
             return Response({'detail': 'El usuario no se encuentra registrado.'}, status=status.HTTP_401_UNAUTHORIZED)
-
