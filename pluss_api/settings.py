@@ -16,7 +16,6 @@ import time
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST_DB = os.environ.get("HOST_DB", default=0)
-print('**********', HOST_DB)
 time.sleep(5) # Delay for 5 seconds
 
 # Quick-start development settings - unsuitable for production
@@ -142,3 +141,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Correo de envio
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'#'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'helita.13@hotmail.es'
+EMAIL_HOST_PASSWORD = 'samsung1689'

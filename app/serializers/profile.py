@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from app.models import Profile
 from django.contrib.auth.models import User
+from .group import GroupSerializer
 
 class UserSerializer(ModelSerializer):
     '''
@@ -8,36 +9,23 @@ class UserSerializer(ModelSerializer):
     '''
     class Meta:
         model = User
-        fields = ('__all__')
+        fields = ('id','password', 'first_name', 'username', 'email', 'groups')
 
 class ProfileSerializer(ModelSerializer):
     '''
     Serializador para el perfil de usuario
     '''
-    # def create(self, validated_data):
-    #     groups_data = validated_data.pop('group')
-    #     queryset = User.objects.filter(username__iexact=validated_data['username'])
-    #     print('queryset', queryset)
-    #     if not queryset:
-    #         user = User()
-    #         user.first_name = validated_data['first_name']
-    #         user.username = validated_data['username']
-    #         user.password = validated_data['identification_number']
-    #         user.email = validated_data['username']
-    #         user.save()
-
-    #         # user = User.objects.create_user(**validated_data)
-    #         user.groups.set(groups_data) 
-    #         print('user', user)
-    #         return user
-    #     raise ValidationError("Ya existe un registro igual")
-
+    # user = UserSerializer()
     class Meta:
         model = Profile
-        fields = ('__all__')
+        fields = ('code','phone_number','type_identification','identification_number')
 
-class getProfileSerializer(ProfileSerializer):
+class getProfileSerializer(ModelSerializer):
     '''
     Serializador para consultar info usuarios
     '''
     user = UserSerializer()
+    
+    class Meta:
+        model = Profile
+        fields = ('__all__')
