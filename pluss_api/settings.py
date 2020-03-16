@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'pluss_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cotizaciones_pluss',
+        'NAME': 'pluss_db',
     	'USER': 'pluss',
     	'PASSWORD': 'maestr8_kar1n',
     	'HOST': '165.227.206.139',
