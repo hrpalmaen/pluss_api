@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'pluss_db',
     	'USER': 'pluss',
     	'PASSWORD': 'maestr8_kar1n',
-    	'HOST': '165.227.206.139',
+    	'HOST': '192.168.1.3', #'165.227.206.139',
     	'PORT': '5433',
         # 'NAME': 'cotizaciones_pluss',
         # 'USER':'kamehouse@kamehouse',
