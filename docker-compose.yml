@@ -1,35 +1,31 @@
-version: '3.7'
+version: '3'
 services:
    api:
       # image: cristhiankr/pluss_api:v1
       image: pluss_api
-      # build: .
       container_name: api_pluss
-      # command: ["import time", "time.sleep(15) # Delay for 5 seconds"]
-      # command: apt-get install wkhtmltopdf
-      # command: python manage.py migrate
       command: python manage.py runserver 0.0.0.0:8933
-      environment: 
-        HOST_DB: postgres
-      # links:
-      #   - db:postgres
-      volumes:
-        - .:/api
       ports:
         - "8933:8933" 
-#       depends_on:
-#         - db
-#    db:
-#       image: postgres:12.0-alpine
-#       container_name: db_pluss
-#       ports:
-#         - "5433:5432"
-#       volumes:
-#         - postgres_data:/var/lib/postgresql/data/
-#       environment:
-#         POSTGRES_USER: pluss
-#         POSTGRES_DB: cotizaciones_pluss
-#         POSTGRES_PASSWORD: maestr8_kar1n
+      volumes:
+        - .:/api
+      environment:
+        HOST_DB: postgres
+      links:
+        - db:postgres
+      depends_on:
+        - db
+   db:
+      image: postgres:12.0-alpine
+      # container_name: db_pluss
+      ports:
+        - "5433:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data/
+      environment:
+        POSTGRES_USER: pluss
+        POSTGRES_DB: pluss_db
+        POSTGRES_PASSWORD: maestr8_kar1n
           
-# volumes: 
-#    postgres_data:
+volumes: 
+   postgres_data:
