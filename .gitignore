@@ -1,1 +1,3 @@
 *.pyc
+app/__pycache__
+pluss_api/__pycache__

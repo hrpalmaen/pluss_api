@@ -91,12 +91,12 @@ DATABASES = {
         'NAME': 'pluss_db',
     	'USER': 'pluss',
     	'PASSWORD': 'maestr8_kar1n',
-    	'HOST': '165.227.206.139',
-    	'PORT': '5433',
+    	'HOST': HOST_DB,
+    	'PORT': '5432',
         # 'NAME': 'cotizaciones_pluss',
         # 'USER':'kamehouse@kamehouse',
-        # 'PASSWORD': 'Pepe1234',
-        # 'HOST': 'kamehouse.postgres.database.azure.com',
+        # 'PASSWORD': 'maestr8_kar1n',
+        # 'HOST': '165.227.206.139',
         # 'PORT': '5432',
     }
 }
