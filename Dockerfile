@@ -4,7 +4,6 @@ WORKDIR /api/
 # RUN pip install pipenv
 # RUN pipenv install --system
 COPY requirements.txt .
-RUN ls
 RUN apt update
 RUN apt install wkhtmltopdf -y
 RUN pip install -r requirements.txt
