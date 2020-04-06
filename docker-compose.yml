@@ -1,35 +1,40 @@
-version: '3.7'
+version: "3"
 services:
-   api:
-      # image: cristhiankr/pluss_api:v1
-      image: pluss_api
-      # build: .
-      container_name: api_pluss
-      # command: ["import time", "time.sleep(15) # Delay for 5 seconds"]
-      # command: apt-get install wkhtmltopdf
-      # command: python manage.py migrate
-      command: python manage.py runserver 0.0.0.0:8933
-      environment: 
-        HOST_DB: postgres
-      # links:
-      #   - db:postgres
-      volumes:
-        - .:/api
-      ports:
-        - "8933:8933" 
-#       depends_on:
-#         - db
-#    db:
-#       image: postgres:12.0-alpine
-#       container_name: db_pluss
-#       ports:
-#         - "5433:5432"
-#       volumes:
-#         - postgres_data:/var/lib/postgresql/data/
-#       environment:
-#         POSTGRES_USER: pluss
-#         POSTGRES_DB: cotizaciones_pluss
-#         POSTGRES_PASSWORD: maestr8_kar1n
-          
-# volumes: 
-#    postgres_data:
+  api:
+    # image: cristhiankr/pluss_api:v1
+    image: pluss_api
+    container_name: api_pluss
+    command: python manage.py runserver 0.0.0.0:8933
+    ports:
+      - "8933:8933"
+    volumes:
+      - .:/api
+    environment:
+      HOST_DB: postgres
+      REDIS: redis
+    links:
+      - db:postgres
+      - redis_db:redis
+    depends_on:
+      - db
+      - redis_db
+  db:
+    image: postgres:12.0-alpine
+    container_name: db_pluss
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: pluss
+      POSTGRES_DB: pluss_db
+      POSTGRES_PASSWORD: maestr8_kar1n
+
+  redis_db:
+    image: redis:5
+    container_name: redis
+    ports: 
+      - "6379:6379"
+
+volumes:
+  postgres_data:

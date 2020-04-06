@@ -16,6 +16,7 @@ import time
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST_DB = os.environ.get("HOST_DB", default=0)
+REDIS_DB = os.environ.get("REDIS", default=0)
 time.sleep(5) # Delay for 5 seconds
 
 # Quick-start development settings - unsuitable for production
@@ -38,6 +39,8 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +50,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'django_filters',
-    'app'
 ]
 
 MIDDLEWARE = [
@@ -79,8 +81,20 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pluss_api.wsgi.application'
+# Channels settings
+ASGI_APPLICATION = "pluss_api.routing.channel_routing"
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(REDIS_DB, 6379)],
+        },
+    },
+}
+
+# sync settings
+WSGI_APPLICATION = 'pluss_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -91,12 +105,17 @@ DATABASES = {
         'NAME': 'pluss_db',
     	'USER': 'pluss',
     	'PASSWORD': 'maestr8_kar1n',
+<<<<<<< HEAD
     	'HOST': '192.168.1.3', #'165.227.206.139',
     	'PORT': '5433',
+=======
+    	'HOST': HOST_DB,
+    	'PORT': '5432',
+>>>>>>> Modify: change connect to db and clear docker-file
         # 'NAME': 'cotizaciones_pluss',
         # 'USER':'kamehouse@kamehouse',
-        # 'PASSWORD': 'Pepe1234',
-        # 'HOST': 'kamehouse.postgres.database.azure.com',
+        # 'PASSWORD': 'maestr8_kar1n',
+        # 'HOST': '165.227.206.139',
         # 'PORT': '5432',
     }
 }

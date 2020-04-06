@@ -13,7 +13,6 @@ class LoginView(ModelViewSet):
     '''
     Vista de autenticación
     '''
-    print('entre')
     queryset = User.objects.all()    
     def create(self, request):
         ''' Módulo de logueo
@@ -31,7 +30,6 @@ class LoginView(ModelViewSet):
             errors['username'] = ['El correo electrónico es obligatorio.']
         if password == '' or password is None:
             errors['password'] = ['La contraseña es obligatoria.']
-        print('entre 2 *', errors)
         if len(errors) > 0:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
             
@@ -39,14 +37,10 @@ class LoginView(ModelViewSet):
         Search data user with permissions
         '''
         try:
-            print('username',username)
             user = User.objects.get(username=username)
-            print('user',user)
             if user.check_password(password):
-                print('user.check_password(password)', user.check_password(password))
                 permissions = user.groups.all()
-                print('Permission', permissions)
-                user_permissions = [0].name if permissions else [] #user.get_all_permissions()#
+                user_permissions = permissions[0].name if permissions else [] #user.get_all_permissions()#
                 return Response({'name': user.first_name, 'permission': user_permissions}, status=200)
             else:
                 return Response({'detail': 'El usuario o la clave no son correctas.', status:status.HTTP_401_UNAUTHORIZED})
