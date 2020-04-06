@@ -1,6 +1,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from channels.layers import get_channel_layer
 
 class LoginConsumer(WebsocketConsumer):
 
@@ -14,68 +15,84 @@ class LoginConsumer(WebsocketConsumer):
     def connect(self):
         print('** Somebody connect **')
         scope = self.scope['client']
-        print('scope', scope)
-
-        # exist = self.validate_User(email)
-
         self.accept()
-
-        # print('self.room_name', self.room_name)
-
         async_to_sync(self.channel_layer.group_add)(
             self._GROUP_NAME,
             self.channel_name
         )
 
-
     def receive(self, text_data):
         print('sent messagge', text_data)
         dic_text_data = json.loads(text_data)
-        print('sent messagge', dic_text_data)
         method = dic_text_data['method']
         email = dic_text_data['email']
-        # exist_user = self.validate_User(email)
-        exist = self.validate_User(email)
+
+        exist_user = self.validate_User(email)        
+        if exist_user:
+            print('exist', exist_user['channel_name'])
 
         if method == self._SIGN_IN:
-            if exist: self.clearUser(email)
-            self.push_user(email)
+            self.clearUser(email, exist_user['channel_name']) if exist_user else self.push_user(email, self.channel_name)
+    
+        print('********', self.user_active)
+        self.send_message_group('message group')
+        
 
-        mensaje = {
-            'type': 'validate_user',
-            'data': self.user_active
-        }
+    def ws_disconnect(self, channel_name):
+        print('********Ciao*******', channel_name)
+        self.senf_message_channel('ciao', channel_name)
+        async_to_sync(self.channel_layer.group_discard)( self._GROUP_NAME, channel_name)
 
-        self.chat_message(self.user_active)
+                            # ****** Methods seconds *******
 
-        # Send message to room group BUT no is necessary for evit a lot request at server api full rest
+    def senf_message_channel(self, message, channel_name):
+        print('enviar', channel_name)
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.send)(
+            channel_name,{
+            'type': 'send_message', # type key correspondin to the name of method that be invoked
+            'text': message
+        })
+
+    def send_message_group(self, message):
         async_to_sync(self.channel_layer.group_send)(
             self._GROUP_NAME,
             {
-                'type': 'chat_message', # type key correspondin to the name of method that be invoked
-                'message': self.user_active
+                'type': 'send_message', # type key correspondin to the name of method that be invoked
+                'message': message
             }
         )
-
-    def ws_disconnect(self, message):
-        print('********Ciao*******')
-
-                            # ****** Methods second *******
+    
+    def send_message(self, message):
+        message_send = self.chat_message(message)
+        print('pepepe', message_send)
+        self.send(text_data=message_send)
 
     def chat_message(self, event):
         json_string = json.dumps(event)
-        self.send(text_data= json_string)
+        return json_string
 
     def validate_User(self, email):
-        exist = filter(self.def_exist, email)
-        return exist
-
-    def def_exist(self, email):
+        # exist = filter(self.def_exist, self.user_active)
+        # return list(exist)
         for user in self.user_active:
-            return True if email == user else False
+            if email == user['email']: 
+                print('USER: ',user)
+                return user 
+        return []
 
-    def clearUser(self, email):
-        self.user_active.remove(email)
+    def clearUser(self, email, channel_name):
+        print('*_*', channel_name)
+        self.ws_disconnect(channel_name)
+        try:
+            self.user_active.remove(email)
+        except ValueError:
+            pass
 
-    def push_user(self, email):
-        self.user_active.append(email)
+    def push_user(self, email, channel_name):
+        print('Add client', email)
+        user = {
+            'email': email,
+            'channel_name': channel_name
+        }
+        self.user_active.append(user)
