@@ -105,13 +105,9 @@ DATABASES = {
         'NAME': 'pluss_db',
     	'USER': 'pluss',
     	'PASSWORD': 'maestr8_kar1n',
-<<<<<<< HEAD
-    	'HOST': '192.168.1.3', #'165.227.206.139',
-    	'PORT': '5433',
-=======
     	'HOST': HOST_DB,
     	'PORT': '5432',
->>>>>>> Modify: change connect to db and clear docker-file
+
         # 'NAME': 'cotizaciones_pluss',
         # 'USER':'kamehouse@kamehouse',
         # 'PASSWORD': 'maestr8_kar1n',
