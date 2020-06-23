@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'pluss_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pluss_db',
-    	'USER': 'pluss',
-    	'PASSWORD': 'maestr8_kar1n',
-    	'HOST': '165.227.206.139',
-    	'PORT': '5433',
+        'NAME': 'bykxbkju',
+    	'USER': 'bykxbkju',
+    	'PASSWORD': '6wOszH6a30rKtWH2ZrHR2Z3hJEe-u5eX',
+    	'HOST': 'ruby.db.elephantsql.com',
+    	'PORT': '5432',
         # 'NAME': 'cotizaciones_pluss',
         # 'USER':'kamehouse@kamehouse',
         # 'PASSWORD': 'Pepe1234',
