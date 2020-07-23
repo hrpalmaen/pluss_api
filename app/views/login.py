@@ -14,11 +14,10 @@ class LoginView(ModelViewSet):
     Vista de autenticación
     '''
     queryset = User.objects.all()    
-
     def create(self, request):
-        '''
-        Módulo de logueo
-        '''
+        ''' Módulo de logueo
+        ''' 
+
         username = request.data['username']
         password = request.data['password']
 
@@ -38,10 +37,11 @@ class LoginView(ModelViewSet):
         Search data user with permissions
         '''
         try:
-            user = User.objects.get(username=username)           
+            user = User.objects.get(username=username)
             if user.check_password(password):
-                permissions = user.groups.all()[0].name#user.get_all_permissions()#
-                return Response({'name': user.first_name, 'permission': permissions}, status=200)
+                permissions = user.groups.all()
+                # user_permissions = [0].name if permissions else [] #user.get_all_permissions()#
+                return Response({'name': user.first_name, 'permission': permissions[0].name}, status=200)
             else:
                 return Response({'detail': 'El usuario o la clave no son correctas.', status:status.HTTP_401_UNAUTHORIZED})
         except:
