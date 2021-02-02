@@ -16,7 +16,8 @@ import time
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST_DB = os.environ.get("HOST_DB", default=0)
-time.sleep(5) # Delay for 5 seconds
+# time.sleep(5) # Delay for 5 seconds
+print('******************************************************',HOST_DB)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -88,10 +89,10 @@ WSGI_APPLICATION = 'pluss_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bykxbkju',
-    	'USER': 'bykxbkju',
-    	'PASSWORD': '6wOszH6a30rKtWH2ZrHR2Z3hJEe-u5eX',
-    	'HOST': 'ruby.db.elephantsql.com',
+        'NAME': 'Pluss_DB',
+    	'USER': 'pluss',
+    	'PASSWORD': 'pepegrillo',
+    	'HOST': HOST_DB,
     	'PORT': '5432',
         # 'NAME': 'cotizaciones_pluss',
         # 'USER':'kamehouse@kamehouse',
